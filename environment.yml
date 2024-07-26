@@ -1,0 +1,7 @@
+name: zero_to_hero
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - matplotlib
