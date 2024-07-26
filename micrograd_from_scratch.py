@@ -56,7 +56,9 @@ class Value:
     ):  # overwrite an existing python method (repr) to print the object in a readable way; also called dunder mehod for double underscore
         return f"Value(data={self.data})"
 
-    def __add__(self, other):  # overwrite dunder method to add two objects
+    def __add__(
+        self, other
+    ):  # overwrite dunder method to add two objects; this will allow us to use the + operator rather than the add method to add two objects, e.g. a + b rather than a.add(b)
         return Value(self.data + other.data)
 
     def __mul__(self, other):  # overwrite dunder method to multiply two objects
@@ -92,6 +94,7 @@ class Value:
     def __mul__(self, other):
         return Value(self.data * other.data, (self, other), "*")
 
+
 # %%
 a = Value(2.0)
 a
@@ -102,7 +105,7 @@ a._op
 # %%
 # So we see that the previous value is empty and the operation is empty because we have not performed any operations yet. Let's do that now:
 b = Value(-3.0)
-e = a*b
+e = a * b
 # %%
 e
 # %%
@@ -112,7 +115,7 @@ e._op
 # %%
 # Let's add another operation
 c = Value(10.0)
-d = a*b + c
+d = a * b + c
 d
 # %%
 d._prev
@@ -120,3 +123,11 @@ d._prev
 d._op
 # %%
 # I find this a bit weird because we actually have two operations going on for d and d was just always the result of this operattion. So there is nothing "previous" really here. It seems a bit arbitrary that a*b = -6 is seen as a previous result and c=10 and that we do not have 3 previous results. Similarly, we only see the operation + and not the operation *. Let's see if it becomes clearer why this is the case...
+
+# It actually only seems this way. Whenever we add or multiply, we create a new value object under the hood. So when we do a*b + c, we get first an object, say, m=a*b, and then we get another object, say, n = m+c. So this is why it seems that we only have one previous value and one operation. But actually we have more and we can access it:
+
+m = next(iter(d._prev))  # get the first element of the set; a set is unordered, so it is not that easy to access the first element as compared to a list. But we can use the next function to get the first element. Iter creates an iteration from an iterable and the next function gets the next element from the iteration.
+m._prev
+m._op
+
+# This shows that our class is already storing a lot of information under the hood.
