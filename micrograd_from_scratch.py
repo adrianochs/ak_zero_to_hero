@@ -126,7 +126,9 @@ d._op
 
 # It actually only seems this way. Whenever we add or multiply, we create a new value object under the hood. So when we do a*b + c, we get first an object, say, m=a*b, and then we get another object, say, n = m+c. So this is why it seems that we only have one previous value and one operation. But actually we have more and we can access it:
 
-m = next(iter(d._prev))  # get the first element of the set; a set is unordered, so it is not that easy to access the first element as compared to a list. But we can use the next function to get the first element. Iter creates an iteration from an iterable and the next function gets the next element from the iteration.
+m = next(
+    iter(d._prev)
+)  # get the first element of the set; a set is unordered, so it is not that easy to access the first element as compared to a list. But we can use the next function to get the first element. Iter creates an iteration from an iterable and the next function gets the next element from the iteration.
 m._prev
 m._op
 
